@@ -4,6 +4,7 @@ import cors from "cors";
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/auth.routes.js";
 import resumeRoutes from "./routes/resume.routes.js";
+import jobRoutes from "./routes/job.routes.js";
 
 const app = express();
 
@@ -28,6 +29,7 @@ app.get("/health", (req, res) => {
 
 // Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/jobs", jobRoutes);
 app.use("/api/resume", resumeRoutes);
 
 // Error handling middleware
