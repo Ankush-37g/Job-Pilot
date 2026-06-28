@@ -5,6 +5,9 @@ import connectDB from "./config/db.js";
 import authRoutes from "./routes/auth.routes.js";
 import resumeRoutes from "./routes/resume.routes.js";
 import jobRoutes from "./routes/job.routes.js";
+import statsRoutes from "./routes/stats.routes.js";
+import cronRoutes from "./routes/cron.routes.js";
+import { initCron } from "./jobs/cronJobs.js";
 
 const app = express();
 
@@ -31,6 +34,9 @@ app.get("/health", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/jobs", jobRoutes);
 app.use("/api/resume", resumeRoutes);
+// Stats & cron routes
+app.use("/api/jobs", statsRoutes);
+app.use("/api/jobs/cron", cronRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -75,4 +81,10 @@ app.listen(PORT, () => {
 ║   Env: ${process.env.NODE_ENV || "development"}         ║
 ╚════════════════════════════════════════╝
   `);
+  // Initialize scheduled cron jobs (if enabled)
+  try {
+    initCron();
+  } catch (err) {
+    console.error("Failed to initialize cron jobs:", err.message);
+  }
 });
